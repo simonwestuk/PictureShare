@@ -4,7 +4,34 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+
+
+
+<div class="container-fluid">
+    <div class="row">
+
+        @foreach (var picture in Model)
+        {
+            <div class="col">
+                <div class="item">
+                    <div class="polaroid">
+                        <img src="@picture.ImagePath">
+                        <div class="caption">@picture.Caption</div>
+                    </div>
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+
+
+
+
 
 <p>
     <a asp-action="Create">Create New</a>

@@ -69,9 +69,13 @@ namespace PictureShare.Views
 
                 string root = _webHostEnvironment.WebRootPath;
 
-                var path = $"{root}/images/{User.Identity.Name.Replace("@",string.Empty).Replace(".", string.Empty).ToLower()}/";
+                var webPath = $"/images/{User.Identity.Name.Replace("@",string.Empty).Replace(".", string.Empty).ToLower()}/";
 
-                pictureModel.ImagePath = $"{path}{DateTime.Now.ToString("yymmssfff")}{ext}".ToLower();
+                var path = $"{root}{webPath}";
+
+                var fileName = $"{DateTime.Now.ToString("yymmssfff")}{ext}".ToLower();
+
+                pictureModel.ImagePath = $"{path}{fileName}";
 
                 Directory.CreateDirectory(path);
 
@@ -81,7 +85,7 @@ namespace PictureShare.Views
                 }
 
                 pictureModel.UserEmail = User.Identity.Name;
-                
+                pictureModel.ImagePath = $"{webPath}{fileName}";
 
                 _context.Add(pictureModel);
                 await _context.SaveChangesAsync();
