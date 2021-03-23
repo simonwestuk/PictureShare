@@ -21,6 +21,8 @@ namespace PictureShare.Models
         [Required]
         public string Caption { get; set; }
 
+        public bool Public { get; set; }
+
         [NotMapped]
         public IFormFile Image { get; set; }
 

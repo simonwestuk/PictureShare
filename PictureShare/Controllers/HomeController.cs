@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PictureShare.Data;
 using PictureShare.Models;
 using System;
 using System.Collections.Generic;
@@ -16,19 +18,22 @@ namespace PictureShare.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly SignInManager<UserModel> _signInManager;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, SignInManager<UserModel> signInManager)
+        public HomeController(ILogger<HomeController> logger, SignInManager<UserModel> signInManager, ApplicationDbContext context)
         {
             _logger = logger;
             _signInManager = signInManager;
+            _context = context;
         }
 
 
         [Authorize]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+           var data = await _context.Picture.Where(x => x.Public).ToListAsync();
 
-            return View();
+           return View(data);
         }
 
         public IActionResult Privacy()

@@ -1,10 +1,40 @@
-﻿
+﻿@model IEnumerable<PictureShare.Models.PictureModel>
+
 @{
     ViewData["Title"] = "Index";
 }
 
 
-<div class="d-flex justify-content-center">
-    <button class="btn btn-primary">CLICK ME</button>
-</div>
+<div class="container-fluid">
+    <div class="row">
+        <form method="get">
+            <div class="col-6 mt-5">
+                <div class="input-group mx-4">
+                    <input type="text" name="SearchBy" class="form-control" placeholder="Search" aria-label="Seacrh" aria-describedby="btn-search">
+                    <button class="btn btn-secondary" type="submit" id="btn-search"><i class="bi bi-search"></i></button>
+                </div>
+            </div>
+        </form>
 
+    </div>
+
+    <div class="row">
+
+        @foreach (var picture in Model)
+        {
+            <div class="col-md-4">
+                @*<a asp-action="Details" asp-route-id="@picture.Id">*@
+                <div class="item">
+                    <div class="polaroid">
+                        <img src="@picture.ImagePath">
+                        <div class="caption">@picture.Caption</div>
+                        <div class="text-muted">@picture.UserEmail</div>
+
+                    </div>
+                </div>
+                @*</a> |*@
+            </div>
+        }
+
+    </div>
+</div>
