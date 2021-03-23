@@ -25,9 +25,17 @@ namespace PictureShare.Views
         }
 
         // GET: Pictures
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchBy)
         {
-            return View(await _context.Picture.ToListAsync());
+
+            var data = _context.Picture.Where(x => x.UserEmail == User.Identity.Name);
+
+            if (!String.IsNullOrEmpty(SearchBy))
+            {
+                data = data.Where(x => x.Caption.Contains(SearchBy));
+            }
+         
+            return View(await data.ToListAsync());
         }
 
         // GET: Pictures/Details/5
