@@ -6,15 +6,37 @@
 
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row px-2">
         <form method="get">
-            <div class="col-6 mt-5">
-                <div class="input-group mx-4">
-                    <input type="text" name="SearchBy" class="form-control" placeholder="Search" aria-label="Seacrh" aria-describedby="btn-search">
-                    <button class="btn btn-secondary" type="submit" id="btn-search"><i class="bi bi-search"></i></button>
+            <div class="col-12 mt-4">
+                <div class="input-group">
+                    <input type="text" name="SearchBy" class="form-control" placeholder="Search Images" aria-label="Search" aria-describedby="btn-search" value="@ViewData["Search"]">
+                    <button class="btn btn-dark" type="submit" id="btn-search"><i class="bi bi-search"></i></button>
+                    <a class="btn btn-secondary" id="btn-clear" asp-action="Index"><i class="bi bi-x"></i></a>
                 </div>
             </div>
         </form>
+      
+    </div>
+
+
+    <div class="row p-2">
+        <div class="col-md-3">
+            <a asp-route-SortBy="captionAZ" asp-route-SearchBy="@ViewData["Search"]" class="btn btn-dark w-100 mx-2" id="btn-sort-captionAZ">Sory by Caption ( A - Z )</a>
+        </div>
+
+        <div class="col-md-3">
+            <a asp-route-SortBy="captionZA" asp-route-SearchBy="@ViewData["Search"]" class="btn btn-dark w-100 mx-2" id="btn-sort-captionZA">Sory by Caption ( Z - A )</a>
+        </div>
+
+        <div class="col-md-3">
+            <a asp-route-SortBy="userAZ" asp-route-SearchBy="@ViewData["Search"]" class="btn btn-dark w-100 mx-2" id="btn-sort-userAZ">Sory by User ( A - Z )</a>
+        </div>
+
+        <div class="col-md-3">
+            <a asp-route-SortBy="userZA" asp-route-SearchBy="@ViewData["Search"]" class="btn btn-dark w-100 mx-2" id="btn-sort-userZA">Sory by User ( Z - A )</a>
+        </div>
+
 
     </div>
 
@@ -23,16 +45,16 @@
         @foreach (var picture in Model)
         {
             <div class="col-md-4">
-                @*<a asp-action="Details" asp-route-id="@picture.Id">*@
+               <a asp-controller="Pictures" asp-action="Details" asp-route-id="@picture.Id">
                 <div class="item">
-                    <div class="polaroid">
+                    <div class="polaroid text-center">
                         <img src="@picture.ImagePath">
                         <div class="caption">@picture.Caption</div>
                         <div class="text-muted">@picture.UserEmail</div>
 
                     </div>
                 </div>
-                @*</a> |*@
+               </a>
             </div>
         }
 

@@ -29,11 +29,43 @@ namespace PictureShare.Controllers
 
 
         [Authorize]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchBy, string SortBy)
         {
-           var data = await _context.Picture.Where(x => x.Public).ToListAsync();
+            var data = _context.Picture.Where(x => x.Public);
 
-           return View(data);
+            if (!String.IsNullOrEmpty(SearchBy))
+            {
+                ViewData["Search"] = SearchBy;
+                data = data.Where(x => x.Caption.Contains(SearchBy) || x.UserEmail.Contains(SearchBy));
+            }
+            
+            switch (SortBy)
+            {
+                case "captionAZ":
+                    data = data.OrderBy(x => x.Caption);
+                    break;
+                case "captionZA":
+                    data = data.OrderByDescending(x => x.Caption);
+                    break;
+                case "userAZ":
+                    data = data.OrderBy(x => x.UserEmail);
+                    break;
+                case "userZA":
+                    data = data.OrderByDescending(x => x.UserEmail);
+                    break;
+            }
+
+
+
+
+
+
+
+
+
+
+
+            return View(await data.ToListAsync());
         }
 
         public IActionResult Privacy()
