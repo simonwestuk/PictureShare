@@ -23,8 +23,18 @@ namespace PictureShare.Models
 
         public bool Public { get; set; }
 
+        public int Likes { get; set; }
+
+        public List<CommentModel> Comments { get; set; }
+
         [NotMapped]
         public IFormFile Image { get; set; }
 
+        public PictureModel()
+        {
+           
+           Comments = new List<CommentModel>();
+            
+        }
     }
 }

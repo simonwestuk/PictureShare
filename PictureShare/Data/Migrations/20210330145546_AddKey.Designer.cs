@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PictureShare.Data;
 
 namespace PictureShare.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210330145546_AddKey")]
+    partial class AddKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -164,9 +166,6 @@ namespace PictureShare.Data.Migrations
                     b.Property<DateTime>("DTStamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("PictureModelId")
                         .HasColumnType("int");
 
@@ -180,7 +179,7 @@ namespace PictureShare.Data.Migrations
 
                     b.HasIndex("PictureModelId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("CommentModel");
                 });
 
             modelBuilder.Entity("PictureShare.Models.PictureModel", b =>

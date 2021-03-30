@@ -48,6 +48,11 @@ namespace PictureShare.Views
 
             var pictureModel = await _context.Picture
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var comments =  _context.Comment.Where(p => p.ImageId == id);
+
+            pictureModel.Comments = await comments.OrderByDescending(c => c.DTStamp).ToListAsync();
+
             if (pictureModel == null)
             {
                 return NotFound();
@@ -186,6 +191,38 @@ namespace PictureShare.Views
         private bool PictureModelExists(int id)
         {
             return _context.Picture.Any(e => e.Id == id);
+        }
+
+        [HttpPost, ActionName("Comment")]
+        public async Task<IActionResult> Comment(string comment, int? id)
+        {
+
+            var pictureModel = await _context.Picture
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (pictureModel == null)
+            {
+                return NotFound();
+            }
+
+        
+            CommentModel c = new CommentModel();
+
+            c.Text = comment;
+            c.DTStamp = DateTime.Now;
+            c.User = User.Identity.Name;
+            c.ImageId = (int)id;
+
+            pictureModel.Comments.Add(c);
+
+            _context.Update(pictureModel);
+
+            await _context.SaveChangesAsync();
+    
+            return RedirectToAction(nameof(Details), new { id = id });
+    
+          
+
         }
     }
 }
