@@ -27,6 +27,12 @@ namespace PictureShare.Models
 
         public List<CommentModel> Comments { get; set; }
 
+        [Required]
+        public int CategoryId { get; set; }
+
+        [ForeignKey("CategoryId")]
+        public CategoryModel Category { get; set; }
+
         [NotMapped]
         public IFormFile Image { get; set; }
 

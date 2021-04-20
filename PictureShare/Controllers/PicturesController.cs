@@ -34,8 +34,16 @@ namespace PictureShare.Views
             {
                 data = data.Where(x => x.Caption.Contains(SearchBy));
             }
-         
-            return View(await data.ToListAsync());
+
+            List<PictureModel> pictures = await data.ToListAsync();
+
+            //I DO NOT LIKE THIS METHOD
+            foreach (var picture in pictures)
+            {
+                picture.Category = await _context.Category.FindAsync(picture.CategoryId);
+            }
+
+            return View(pictures);
         }
 
         // GET: Pictures/Details/5
@@ -64,7 +72,18 @@ namespace PictureShare.Views
         // GET: Pictures/Create
         public IActionResult Create()
         {
-            return View();
+
+            PictureViewModel pictureVM = new PictureViewModel()
+            {
+                Picture = new PictureModel(),
+                CategoryList = _context.Category.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                })
+            };
+
+            return View(pictureVM);
         }
 
         // POST: Pictures/Create
@@ -72,7 +91,7 @@ namespace PictureShare.Views
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserEmail,ImagePath,Caption")] PictureModel pictureModel)
+        public async Task<IActionResult> Create([Bind("Picture, CategoryId")] PictureViewModel pictureViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -88,24 +107,24 @@ namespace PictureShare.Views
 
                 var fileName = $"{DateTime.Now.ToString("yymmssfff")}{ext}".ToLower();
 
-                pictureModel.ImagePath = $"{path}{fileName}";
+                pictureViewModel.Picture.ImagePath = $"{path}{fileName}";
 
                 Directory.CreateDirectory(path);
 
-                using (var fileStream = new FileStream(pictureModel.ImagePath, FileMode.Create))
+                using (var fileStream = new FileStream(pictureViewModel.Picture.ImagePath, FileMode.Create))
                 {
                     await upload.CopyToAsync(fileStream);
                 }
 
-                pictureModel.UserEmail = User.Identity.Name;
-                pictureModel.ImagePath = $"{webPath}{fileName}";
-                pictureModel.Public = false;
+                pictureViewModel.Picture.UserEmail = User.Identity.Name;
+                pictureViewModel.Picture.ImagePath = $"{webPath}{fileName}";
+                pictureViewModel.Picture.Public = false;
 
-                _context.Add(pictureModel);
+                _context.Add(pictureViewModel.Picture);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(pictureModel);
+            return View(pictureViewModel.Picture);
         }
 
         // GET: Pictures/Edit/5

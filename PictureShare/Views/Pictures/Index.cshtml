@@ -4,9 +4,6 @@
     ViewData["Title"] = "Index";
 }
 
-
-
-
 <div class="container-fluid">
     <div class="row px-4">
         <form method="get">
@@ -32,7 +29,7 @@
                             <a asp-action="Delete" asp-route-id="@picture.Id"><i class="bi bi-x text-dark"></i></a>
                             <img src="@picture.ImagePath">
                             <div class="caption">@picture.Caption <a asp-action="Edit" asp-route-id="@picture.Id"><i class="bi bi-pencil-square text-dark"></i></a> </div>
-
+                            <div class="text-muted">@picture.Category.Name</div>
                         </div>
                     </div>
                 @*</a> |*@

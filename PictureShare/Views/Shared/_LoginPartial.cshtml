@@ -6,11 +6,11 @@
     {
 
         <li class="nav-item mx-2">
-            <a asp-controller="Pictures" asp-action="Create" class="btn btn-outline-light"><i class="bi bi-card-image"></i> Upload Image</a>
+            <a asp-area="Default" asp-controller="Pictures" asp-action="Create" class="btn btn-outline-light"><i class="bi bi-card-image"></i> Upload Image</a>
         </li>
 
         <li class="nav-item mx-2">
-            <a asp-controller="Pictures" asp-action="Index" class="btn btn-outline-light"><i class="bi bi-card-image"></i> Manage Images</a>
+            <a asp-area="Default" asp-controller="Pictures" asp-action="Index" class="btn btn-outline-light"><i class="bi bi-card-image"></i> Manage Images</a>
         </li>
 
 
@@ -31,7 +31,7 @@
             <a class="btn btn-outline-light" asp-area="Identity" asp-page="/Account/Register">Register</a>
         </li>
         <li class="nav-item mx-2">
-            <a class="btn btn-outline-light" asp-controller="Home" asp-action="Login">Login</a>
+            <a class="btn btn-outline-light" asp-area="Default" asp-controller="Home" asp-action="Login">Login</a>
         </li>
     }
 </ul>
