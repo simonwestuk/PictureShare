@@ -8,5 +8,6 @@ namespace PictureShare.Repository
 {
     public interface ICategoryRepository : IRepository<CategoryModel>
     {
+        Task Update(CategoryModel category);
     }
 }

@@ -7,23 +7,24 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PictureShare.Data;
 using PictureShare.Models;
+using PictureShare.Repository;
 
 namespace PictureShare.Areas.Admin.Views
 {
     [Area("Admin")]
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoryController(ApplicationDbContext context)
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Admin/Category
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Category.ToListAsync());
+            return View(await _unitOfWork.Category.GetAll());
         }
 
         // GET: Admin/Category/Details/5
@@ -34,8 +35,8 @@ namespace PictureShare.Areas.Admin.Views
                 return NotFound();
             }
 
-            var categoryModel = await _context.Category
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var categoryModel = await _unitOfWork.Category
+                .GetFirst(m => m.Id == id);
             if (categoryModel == null)
             {
                 return NotFound();
@@ -59,8 +60,8 @@ namespace PictureShare.Areas.Admin.Views
         {
             if (ModelState.IsValid)
             {
-                _context.Add(categoryModel);
-                await _context.SaveChangesAsync();
+                _unitOfWork.Category.Add(categoryModel);
+                await _unitOfWork.Save();
                 return RedirectToAction(nameof(Index));
             }
             return View(categoryModel);
@@ -74,7 +75,7 @@ namespace PictureShare.Areas.Admin.Views
                 return NotFound();
             }
 
-            var categoryModel = await _context.Category.FindAsync(id);
+            var categoryModel = await _unitOfWork.Category.Get(id);
             if (categoryModel == null)
             {
                 return NotFound();
@@ -98,19 +99,12 @@ namespace PictureShare.Areas.Admin.Views
             {
                 try
                 {
-                    _context.Update(categoryModel);
-                    await _context.SaveChangesAsync();
+                    await _unitOfWork.Category.Update(categoryModel);
+                    await _unitOfWork.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryModelExists(categoryModel.Id))
-                    {
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -125,8 +119,8 @@ namespace PictureShare.Areas.Admin.Views
                 return NotFound();
             }
 
-            var categoryModel = await _context.Category
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var categoryModel = await _unitOfWork.Category
+                .GetFirst(m => m.Id == id);
             if (categoryModel == null)
             {
                 return NotFound();
@@ -140,15 +134,11 @@ namespace PictureShare.Areas.Admin.Views
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var categoryModel = await _context.Category.FindAsync(id);
-            _context.Category.Remove(categoryModel);
-            await _context.SaveChangesAsync();
+            var categoryModel = await _unitOfWork.Category.Get(id);
+            _unitOfWork.Category.Remove(categoryModel);
+            await _unitOfWork.Save();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryModelExists(int id)
-        {
-            return _context.Category.Any(e => e.Id == id);
-        }
     }
 }

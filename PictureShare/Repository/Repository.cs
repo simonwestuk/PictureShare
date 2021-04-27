@@ -16,7 +16,7 @@ namespace PictureShare.Repository
         public Repository(ApplicationDbContext db)
         {
             _db = db;
-            this.dbSet = _db.Set<T>();
+            dbSet = _db.Set<T>();
         }
 
         public void Add(T entity)
@@ -24,12 +24,12 @@ namespace PictureShare.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(int id)
+        public async Task<T> Get(int? id)
         {
-            return dbSet.Find(id);
+            return await dbSet.FindAsync(id);
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null)
+        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter = null)
         {
             IQueryable<T> query = dbSet;
 
@@ -38,10 +38,10 @@ namespace PictureShare.Repository
                 query = query.Where(filter);
             }
 
-            return query.ToList();
+            return await query.ToListAsync();
         }
 
-        public T GetFirstOrDefault(Expression<Func<T, bool>> filter = null)
+        public async Task<T> GetFirst(Expression<Func<T, bool>> filter = null)
         {
             IQueryable<T> query = dbSet;
 
@@ -50,7 +50,7 @@ namespace PictureShare.Repository
                 query = query.Where(filter);
             }
 
-            return query.FirstOrDefault();
+            return await query.FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
@@ -63,5 +63,7 @@ namespace PictureShare.Repository
         {
             dbSet.Remove(entity);
         }
+
+      
     }
 }

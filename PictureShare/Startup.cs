@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PictureShare.Data;
 using PictureShare.Models;
+using PictureShare.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,7 @@ namespace PictureShare
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.ConfigureApplicationCookie(options =>
             {

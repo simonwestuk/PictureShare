@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace PictureShare.Repository
 {
     public interface IRepository<T> where T :class
     {
-        T Get(int id);
+        Task<T> Get(int? id);
 
-        IEnumerable<T> GetAll(
+        Task<IEnumerable<T>> GetAll(
             Expression<Func<T, bool>> filter = null
             );
 
-        T GetFirstOrDefault(
+        Task<T> GetFirst(
             Expression<Func<T, bool>> filter = null
             );
 

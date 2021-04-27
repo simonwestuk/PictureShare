@@ -8,5 +8,7 @@ namespace PictureShare.Repository
     public interface IUnitOfWork
     {
         ICategoryRepository Category { get; set; }
+
+        Task Save();
     }
 }
